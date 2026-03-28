@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanzas Personales</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e4e4e4;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #00d4ff;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .balance-section {
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .balance-label {
+            font-size: 1.2rem;
+            color: #a0a0a0;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .balance-amount {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #00d4ff;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+        }
+
+        .balance-amount.negative {
+            color: #ff4757;
+            text-shadow: 0 0 30px rgba(255, 71, 87, 0.5);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 968px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: rgba(22, 33, 62, 0.8);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .card h2 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(15, 52, 96, 0.6);
+            border: 2px solid rgba(0, 212, 255, 0.2);
+            border-radius: 8px;
+            color: #e4e4e4;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .transactions-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .transactions-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .transactions-list::-webkit-scrollbar-track {
+            background: rgba(15, 52, 96, 0.3);
+            border-radius: 10px;
+        }
+
+        .transactions-list::-webkit-scrollbar-thumb {
+            background: rgba(0, 212, 255, 0.5);
+            border-radius: 10px;
+        }
+
+        .transaction-item {
+            background: rgba(15, 52, 96, 0.4);
+            border-left: 4px solid #00d4ff;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .transaction-item:hover {
+            background: rgba(15, 52, 96, 0.7);
+            transform: translateX(5px);
+        }
+
+        .transaction-item.expense {
+            border-left-color: #ff4757;
+        }
+
+        .transaction-item.income {
+            border-left-color: #2ed573;
+        }
+
+        .transaction-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .transaction-type {
+            font-size: 0.85rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .transaction-type.income {
+            background: rgba(46, 213, 115, 0.2);
+            color: #2ed573;
+        }
+
+        .transaction-type.expense {
+            background: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+        }
+
+        .transaction-amount {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .transaction-amount.income {
+            color: #2ed573;
+        }
+
+        .transaction-amount.expense {
+            color: #ff4757;
+        }
+
+        .transaction-description {
+            color: #a0a0a0;
+            font-size: 0.95rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .legend-color.income {
+            background: #2ed573;
+        }
+
+        .legend-color.expense {
+            background: #ff4757;
+        }
+
+        .legend-label {
+            font-size: 0.95rem;
+            color: #a0a0a0;
+        }
+
+        .legend-value {
+            font-weight: bold;
+            color: #e4e4e4;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #a0a0a0;
+            padding: 40px;
+            font-size: 1.1rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #00d4ff;
+        }
+
+        .error-message {
+            background: rgba(255, 71, 87, 0.1);
+            border: 1px solid #ff4757;
+            color: #ff4757;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .success-message {
+            background: rgba(46, 213, 115, 0.1);
+            border: 1px solid #2ed573;
+            color: #2ed573;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💰 Finanzas Personales</h1>
+        </header>
+
+        <div class="balance-section">
+            <div class="balance-label">Balance Total</div>
+            <div class="balance-amount" id="balanceAmount">$0.00</div>
+        </div>
+
+        <div class="main-content">
+            <div class="card">
+                <h2>Nueva Transacción</h2>
+                <div id="formMessage"></div>
+                <form id="transactionForm">
+                    <div class="form-group">
+                        <label for="amount">Monto</label>
+                        <input type="number" id="amount" name="amount" step="0.01" min="0" required placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Tipo</label>
+                        <select id="type" name="type" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="income">Ingreso</option>
+                            <option value="expense">Gasto</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Descripción</label>
+                        <textarea id="description" name="description" required placeholder="Describe la transacción..."></textarea>
+                    </div>
+                    <button type="submit">Agregar Transacción</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>Resumen Visual</h2>
+                <div class="chart-container">
+                    <canvas id="pieChart"></canvas>
+                </div>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <div class="legend-color income"></div>
+                        <div>
+                            <div class="legend-label">Ingresos</div>
+                            <div class="legend-value" id="totalIncome">$0.00</div>
+                        </div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color expense"></div>
+                        <div>
+                            <div class="legend-label">Gastos</div>
+                            <div class="legend-value" id="totalExpense">$0.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Historial de Transacciones</h2>
+            <div id="transactionsList" class="transactions-list">
+                <div class="loading">Cargando transacciones...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:8000';
+        let transactions = [];
+        let pieChartInstance = null;
+
+        // Formatear moneda
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('es-AR', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(amount);
+        }
+
+        // Calcular balance y totales
+        function calculateTotals() {
+            const totals = transactions.reduce((acc, transaction) => {
+                if (transaction.type === 'income') {
+                    acc.income += parseFloat(transaction.amount);
+                } else {
+                    acc.expense += parseFloat(transaction.amount);
+                }
+                return acc;
+            }, { income: 0, expense: 0 });
+
+            totals.balance = totals.income - totals.expense;
+            return totals;
+        }
+
+        // Actualizar UI
+        function updateUI() {
+            const totals = calculateTotals();
+
+            // Actualizar balance
+            const balanceElement = document.getElementById('balanceAmount');
+            balanceElement.textContent = formatCurrency(totals.balance);
+            balanceElement.className = 'balance-amount' + (totals.balance < 0 ? ' negative' : '');
+
+            // Actualizar totales en leyenda
+            document.getElementById('totalIncome').textContent = formatCurrency(totals.income);
+            document.getElementById('totalExpense').textContent = formatCurrency(totals.expense);
+
+            // Actualizar lista de transacciones
+            renderTransactions();
+
+            // Actualizar gráfico
+            updateChart(totals);
+        }
+
+        // Renderizar lista de transacciones
+        function renderTransactions() {
+            const listElement = document.getElementById('transactionsList');
+
+            if (transactions.length === 0) {
+                listElement.innerHTML = '<div class="empty-state">No hay transacciones registradas</div>';
+                return;
+            }
+
+            const html = transactions
+                .sort((a, b) => b.id - a.id)
+                .map(transaction => `
+                    <div class="transaction-item ${transaction.type}">
+                        <div class="transaction-header">
+                            <span class="transaction-type ${transaction.type}">
+                                ${transaction.type === 'income' ? 'Ingreso' : 'Gasto'}
+                            </span>
+                            <span class="transaction-amount ${transaction.type}">
+                                ${transaction.type === 'income' ? '+' : '-'}${formatCurrency(Math.abs(transaction.amount))}
+                            </span>
+                        </div>
+                        <div class="transaction-description">${transaction.description}</div>
+                    </div>
+                `).join('');
+
+            listElement.innerHTML = html;
+        }
+
+        // Actualizar gráfico de torta
+        function updateChart(totals) {
+            const canvas = document.getElementById('pieChart');
+            const ctx = canvas.getContext('2d');
+
+            // Si no hay datos, mostrar mensaje
+            if (totals.income === 0 && totals.expense === 0) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.font = '16px Segoe UI';
+                ctx.fillStyle = '#a0a0a0';
+                ctx.textAlign = 'center';
+                ctx.fillText('No hay datos para mostrar', canvas.width / 2, canvas.height / 2);
+                return;
+            }
+
+            // Configurar tamaño del canvas
+            const size = Math.min(canvas.parentElement.clientWidth, canvas.parentElement.clientHeight);
+            canvas.width = size;
+            canvas.height = size;
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = Math.min(centerX, centerY) - 20;
+
+            // Calcular ángulos
+            const total = totals.income + totals.expense;
+            const incomeAngle = (totals.income / total) * 2 * Math.PI;
+            const expenseAngle = (totals.expense / total) * 2 * Math.PI;
+
+            // Limpiar canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Dibujar segmento de ingresos
+            if (totals.income > 0) {
+                ctx.beginPath();
+                ctx.fillStyle = '#2ed573';
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, -Math.PI / 2, -Math.PI / 2 + incomeAngle);
+                ctx.closePath();
+                ctx.fill();
+
+                // Sombra para ingresos
+                ctx.shadowColor = 'rgba(46, 213, 115, 0.5)';
+                ctx.shadowBlur = 15;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+
+            // Dibujar segmento de gastos
+            if (totals.expense > 0) {
+                ctx.beginPath();
+                ctx.fillStyle = '#ff4757';
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, -Math.PI / 2 + incomeAngle, -Math.PI / 2 + incomeAngle + expenseAngle);
+                ctx.closePath();
+                ctx.fill();
+
+                // Sombra para gastos
+                ctx.shadowColor = 'rgba(255, 71, 87, 0.5)';
+                ctx.shadowBlur = 15;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+
+            // Dibujar círculo central (estilo donut)
+            ctx.beginPath();
+            ctx.fillStyle = 'rgba(22, 33, 62, 0.9)';
+            ctx.arc(centerX, centerY, radius * 0.6, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Dibujar porcentajes
+            ctx.font = 'bold 18px Segoe UI';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = '#e4e4e4';
+
+            if (totals.income > 0) {
+                const incomePercent = ((totals.income / total) * 100).toFixed(1);
+                const incomeAnglePos = -Math.PI / 2 + incomeAngle / 2;
+                const incomeX = centerX + Math.cos(incomeAnglePos) * (radius * 0.75);
+                const incomeY = centerY + Math.sin(incomeAnglePos) * (radius * 0.75);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillText(`${incomePercent}%`, incomeX, incomeY);
+            }
+
+            if (totals.expense > 0) {
+                const expensePercent = ((totals.expense / total) * 100).toFixed(1);
+                const expenseAnglePos = -Math.PI / 2 + incomeAngle + expenseAngle / 2;
+                const expenseX = centerX + Math.cos(expenseAnglePos) * (radius * 0.75);
+                const expenseY = centerY + Math.sin(expenseAnglePos) * (radius * 0.75);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillText(`${expensePercent}%`, expenseX, expenseY);
+            }
+        }
+
+        // Mostrar mensaje
+        function showMessage(message, type = 'success') {
+            const messageDiv = document.getElementById('formMessage');
+            messageDiv.className = type === 'success' ? 'success-message' : 'error-message';
+            messageDiv.textContent = message;
+
+            setTimeout(() => {
+                messageDiv.textContent = '';
+                messageDiv.className = '';
+            }, 3000);
+        }
+
+        // Cargar transacciones desde la API
+        async function loadTransactions() {
+            try {
+                const response = await fetch(`${API_URL}/transactions`);
+                if (!response.ok) throw new Error('Error al cargar transacciones');
+
+                transactions = await response.json();
+                updateUI();
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('transactionsList').innerHTML =
+                    '<div class="empty-state">Error al cargar transacciones. Verifica que la API esté funcionando.</div>';
+            }
+        }
+
+        // Enviar nueva transacción
+        async function submitTransaction(data) {
+            try {
+                const response = await fetch(`${API_URL}/transactions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) throw new Error('Error al crear transacción');
+
+                const newTransaction = await response.json();
+                transactions.push(newTransaction);
+                updateUI();
+                showMessage('Transacción agregada exitosamente', 'success');
+
+                return true;
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Error al agregar transacción. Verifica que la API esté funcionando.', 'error');
+                return false;
+            }
+        }
+
+        // Manejar envío del formulario
+        document.getElementById('transactionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                amount: parseFloat(document.getElementById('amount').value),
+                type: document.getElementById('type').value,
+                description: document.getElementById('description').value
+            };
+
+            const success = await submitTransaction(formData);
+
+            if (success) {
+                e.target.reset();
+            }
+        });
+
+        // Actualizar gráfico cuando cambie el tamaño de la ventana
+        window.addEventListener('resize', () => {
+            const totals = calculateTotals();
+            updateChart(totals);
+        });
+
+        // Cargar transacciones al iniciar
+        loadTransactions();
+    </script>
+</body>
+</html>
