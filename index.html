@@ -319,6 +319,317 @@
             margin-bottom: 15px;
             text-align: center;
         }
+
+        /* Import section styles */
+        .import-section {
+            margin-bottom: 30px;
+        }
+
+        .upload-area {
+            background: rgba(15, 52, 96, 0.4);
+            border: 2px dashed rgba(0, 212, 255, 0.3);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            border-color: #00d4ff;
+            background: rgba(15, 52, 96, 0.6);
+        }
+
+        .upload-area.drag-over {
+            border-color: #2ed573;
+            background: rgba(46, 213, 115, 0.1);
+        }
+
+        .upload-area.has-file {
+            border-color: #2ed573;
+            border-style: solid;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.7;
+        }
+
+        .upload-text {
+            color: #a0a0a0;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .upload-hint {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .file-info {
+            background: rgba(46, 213, 115, 0.1);
+            border: 1px solid #2ed573;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .file-info-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-icon {
+            font-size: 1.5rem;
+        }
+
+        .file-name {
+            font-weight: bold;
+            color: #e4e4e4;
+        }
+
+        .remove-file {
+            background: rgba(255, 71, 87, 0.2);
+            border: none;
+            color: #ff4757;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .remove-file:hover {
+            background: rgba(255, 71, 87, 0.4);
+        }
+
+        .import-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .import-controls .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .import-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #2ed573 0%, #26a65b 100%);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .import-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(46, 213, 115, 0.4);
+        }
+
+        .import-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .import-results {
+            margin-top: 30px;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .kpi-card {
+            background: rgba(15, 52, 96, 0.6);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00d4ff;
+            margin-bottom: 5px;
+        }
+
+        .kpi-value.success {
+            color: #2ed573;
+        }
+
+        .kpi-value.warning {
+            color: #ffa502;
+        }
+
+        .kpi-value.error {
+            color: #ff4757;
+        }
+
+        .kpi-label {
+            font-size: 0.85rem;
+            color: #a0a0a0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .imported-transactions-table {
+            max-height: 600px;
+            overflow-y: auto;
+            overflow-x: auto;
+        }
+
+        .transactions-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transactions-table th {
+            background: rgba(15, 52, 96, 0.8);
+            color: #00d4ff;
+            padding: 12px 10px;
+            text-align: left;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .transactions-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #e4e4e4;
+            font-size: 0.9rem;
+        }
+
+        .transactions-table tr:hover {
+            background: rgba(15, 52, 96, 0.4);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge.ingreso {
+            background: rgba(46, 213, 115, 0.2);
+            color: #2ed573;
+        }
+
+        .badge.gasto {
+            background: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+        }
+
+        .badge.transferencia {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+        }
+
+        .badge.reembolso {
+            background: rgba(255, 165, 2, 0.2);
+            color: #ffa502;
+        }
+
+        .badge.ajuste {
+            background: rgba(160, 160, 160, 0.2);
+            color: #a0a0a0;
+        }
+
+        .badge.confirmada {
+            background: rgba(46, 213, 115, 0.2);
+            color: #2ed573;
+        }
+
+        .badge.pendiente {
+            background: rgba(255, 165, 2, 0.2);
+            color: #ffa502;
+        }
+
+        .badge.duplicada {
+            background: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+        }
+
+        .badge.ignorada {
+            background: rgba(160, 160, 160, 0.2);
+            color: #a0a0a0;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-tab {
+            background: none;
+            border: none;
+            color: #a0a0a0;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .nav-tab:hover {
+            color: #e4e4e4;
+        }
+
+        .nav-tab.active {
+            color: #00d4ff;
+            border-bottom-color: #00d4ff;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid rgba(0, 212, 255, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid #00d4ff;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -327,12 +638,20 @@
             <h1>💰 Finanzas Personales</h1>
         </header>
 
-        <div class="balance-section">
-            <div class="balance-label">Balance Total</div>
-            <div class="balance-amount" id="balanceAmount">$0.00</div>
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
+            <button class="nav-tab" data-tab="import">Importar Mercado Pago</button>
         </div>
 
-        <div class="main-content">
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="balance-section">
+                <div class="balance-label">Balance Total</div>
+                <div class="balance-amount" id="balanceAmount">$0.00</div>
+            </div>
+
+            <div class="main-content">
             <div class="card">
                 <h2>Nueva Transacción</h2>
                 <div id="formMessage"></div>
@@ -381,18 +700,408 @@
             </div>
         </div>
 
-        <div class="card">
-            <h2>Historial de Transacciones</h2>
-            <div id="transactionsList" class="transactions-list">
-                <div class="loading">Cargando transacciones...</div>
+            <div class="card">
+                <h2>Historial de Transacciones</h2>
+                <div id="transactionsList" class="transactions-list">
+                    <div class="loading">Cargando transacciones...</div>
+                </div>
             </div>
         </div>
+        <!-- End Dashboard Tab -->
+
+        <!-- Import Tab -->
+        <div id="import" class="tab-content">
+            <div class="card import-section">
+                <h2>Importar Archivo de Mercado Pago</h2>
+                <div id="importMessage"></div>
+
+                <!-- Upload Area -->
+                <div id="uploadArea" class="upload-area">
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">Arrastra tu archivo aquí o haz click para seleccionar</div>
+                    <div class="upload-hint">Archivos soportados: CSV, XLSX (máx 50MB)</div>
+                    <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" style="display: none;">
+                </div>
+
+                <!-- File Info (hidden by default) -->
+                <div id="fileInfo" class="file-info" style="display: none;">
+                    <div class="file-info-content">
+                        <span class="file-icon">📄</span>
+                        <span class="file-name" id="fileName"></span>
+                    </div>
+                    <button class="remove-file" id="removeFile">✕ Quitar</button>
+                </div>
+
+                <!-- Import Controls -->
+                <div class="import-controls">
+                    <div class="form-group">
+                        <label for="sourceType">Tipo de Archivo</label>
+                        <select id="sourceType" name="sourceType" required>
+                            <option value="mercadopago_csv">Mercado Pago CSV</option>
+                            <option value="mercadopago_excel">Mercado Pago Excel</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button id="importButton" class="import-button" disabled>
+                    Importar Transacciones
+                </button>
+            </div>
+
+            <!-- Import Results -->
+            <div id="importResults" class="import-results" style="display: none;">
+                <div class="card">
+                    <h2>Resultado de la Importación</h2>
+
+                    <!-- KPIs -->
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-value" id="kpiTotal">0</div>
+                            <div class="kpi-label">Total Filas</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value success" id="kpiProcessed">0</div>
+                            <div class="kpi-label">Procesadas</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value warning" id="kpiDuplicated">0</div>
+                            <div class="kpi-label">Duplicadas</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value error" id="kpiFailed">0</div>
+                            <div class="kpi-label">Fallidas</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value warning" id="kpiReview">0</div>
+                            <div class="kpi-label">Revisar</div>
+                        </div>
+                    </div>
+
+                    <!-- Imported Transactions Table -->
+                    <h3 style="color: #00d4ff; margin-bottom: 15px;">Transacciones Importadas</h3>
+                    <div class="imported-transactions-table">
+                        <table class="transactions-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Descripción</th>
+                                    <th>Comercio</th>
+                                    <th>Monto</th>
+                                    <th>Moneda</th>
+                                    <th>Tipo</th>
+                                    <th>Categoría</th>
+                                    <th>Estado</th>
+                                    <th>Método Pago</th>
+                                </tr>
+                            </thead>
+                            <tbody id="importedTransactionsBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Import Tab -->
+
     </div>
 
     <script>
         const API_URL = 'http://127.0.0.1:8000';
         let transactions = [];
         let pieChartInstance = null;
+        let selectedFile = null;
+
+        // ========================================
+        // TAB NAVIGATION
+        // ========================================
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.getAttribute('data-tab');
+                switchTab(tabName);
+            });
+        });
+
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // ========================================
+        // FILE UPLOAD HANDLERS
+        // ========================================
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const removeFileBtn = document.getElementById('removeFile');
+        const importButton = document.getElementById('importButton');
+
+        // Click to upload
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                handleFileSelect(file);
+            }
+        });
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('drag-over');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('drag-over');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                handleFileSelect(file);
+            }
+        });
+
+        // Remove file
+        removeFileBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            clearFileSelection();
+        });
+
+        function handleFileSelect(file) {
+            // Validate file type
+            const validExtensions = ['.csv', '.xlsx', '.xls'];
+            const fileExt = '.' + file.name.split('.').pop().toLowerCase();
+
+            if (!validExtensions.includes(fileExt)) {
+                showImportMessage('Formato de archivo no válido. Usa CSV o XLSX.', 'error');
+                return;
+            }
+
+            // Validate file size (50MB)
+            if (file.size > 50 * 1024 * 1024) {
+                showImportMessage('El archivo es demasiado grande. Máximo 50MB.', 'error');
+                return;
+            }
+
+            selectedFile = file;
+            fileName.textContent = file.name;
+            fileInfo.style.display = 'flex';
+            uploadArea.classList.add('has-file');
+            importButton.disabled = false;
+
+            // Hide any previous results
+            document.getElementById('importResults').style.display = 'none';
+        }
+
+        function clearFileSelection() {
+            selectedFile = null;
+            fileInput.value = '';
+            fileInfo.style.display = 'none';
+            uploadArea.classList.remove('has-file');
+            importButton.disabled = true;
+        }
+
+        // ========================================
+        // IMPORT FUNCTIONALITY
+        // ========================================
+        importButton.addEventListener('click', async () => {
+            if (!selectedFile) {
+                showImportMessage('Por favor selecciona un archivo primero.', 'error');
+                return;
+            }
+
+            const sourceType = document.getElementById('sourceType').value;
+
+            // Show loading state
+            importButton.disabled = true;
+            importButton.innerHTML = '<div class="spinner" style="margin: 0 auto; width: 20px; height: 20px;"></div>';
+
+            try {
+                const result = await uploadAndImportFile(selectedFile, sourceType);
+
+                if (result && result.batch) {
+                    showImportMessage('¡Importación completada exitosamente!', 'success');
+                    displayImportResults(result.batch);
+
+                    // Load imported transactions
+                    await loadImportedTransactions(result.batch.id);
+                } else {
+                    throw new Error('Respuesta inesperada del servidor');
+                }
+
+            } catch (error) {
+                console.error('Error en importación:', error);
+                showImportMessage(
+                    error.message || 'Error al importar archivo. Verifica que el backend esté funcionando.',
+                    'error'
+                );
+            } finally {
+                importButton.disabled = false;
+                importButton.textContent = 'Importar Transacciones';
+            }
+        });
+
+        async function uploadAndImportFile(file, sourceType) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('source_type', sourceType);
+
+            const response = await fetch(`${API_URL}/api/v1/imports/upload`, {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.detail || `Error HTTP: ${response.status}`);
+            }
+
+            return await response.json();
+        }
+
+        function displayImportResults(batch) {
+            // Show results section
+            const resultsSection = document.getElementById('importResults');
+            resultsSection.style.display = 'block';
+
+            // Update KPIs
+            document.getElementById('kpiTotal').textContent = batch.total_rows || 0;
+            document.getElementById('kpiProcessed').textContent = batch.processed_rows || 0;
+            document.getElementById('kpiDuplicated').textContent = batch.duplicated_rows || 0;
+            document.getElementById('kpiFailed').textContent = batch.failed_rows || 0;
+
+            const reviewRequired = batch.metadata?.review_required || 0;
+            document.getElementById('kpiReview').textContent = reviewRequired;
+
+            // Scroll to results
+            setTimeout(() => {
+                resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        async function loadImportedTransactions(batchId) {
+            try {
+                const response = await fetch(`${API_URL}/api/v1/imports/batches/${batchId}/transactions`);
+
+                if (!response.ok) {
+                    throw new Error('Error al cargar transacciones importadas');
+                }
+
+                const data = await response.json();
+                renderImportedTransactions(data.transactions || []);
+
+            } catch (error) {
+                console.error('Error al cargar transacciones:', error);
+                document.getElementById('importedTransactionsBody').innerHTML =
+                    '<tr><td colspan="9" style="text-align: center; color: #ff4757;">Error al cargar transacciones</td></tr>';
+            }
+        }
+
+        function renderImportedTransactions(transactions) {
+            const tbody = document.getElementById('importedTransactionsBody');
+
+            if (transactions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: #a0a0a0;">No hay transacciones para mostrar</td></tr>';
+                return;
+            }
+
+            const html = transactions.map(tx => {
+                const date = formatDate(tx.operation_date);
+                const description = tx.description || 'Sin descripción';
+                const merchant = tx.merchant || tx.merchant_normalized || '-';
+                const amount = formatCurrency(tx.amount || 0);
+                const currency = tx.currency || 'ARS';
+                const type = formatTransactionType(tx.transaction_type);
+                const category = tx.suggested_category_id || 'Sin categoría';
+                const status = formatStatus(tx.status);
+                const paymentMethod = tx.payment_method || '-';
+
+                return `
+                    <tr>
+                        <td>${date}</td>
+                        <td>${escapeHtml(description)}</td>
+                        <td>${escapeHtml(merchant)}</td>
+                        <td style="font-weight: bold;">${amount}</td>
+                        <td>${currency}</td>
+                        <td>${type}</td>
+                        <td>${escapeHtml(category)}</td>
+                        <td>${status}</td>
+                        <td>${escapeHtml(paymentMethod)}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            tbody.innerHTML = html;
+        }
+
+        function formatTransactionType(type) {
+            const typeMap = {
+                'ingreso': '<span class="badge ingreso">Ingreso</span>',
+                'gasto': '<span class="badge gasto">Gasto</span>',
+                'transferencia': '<span class="badge transferencia">Transferencia</span>',
+                'reembolso': '<span class="badge reembolso">Reembolso</span>',
+                'ajuste': '<span class="badge ajuste">Ajuste</span>',
+            };
+            return typeMap[type] || `<span class="badge">${type}</span>`;
+        }
+
+        function formatStatus(status) {
+            const statusMap = {
+                'confirmada': '<span class="badge confirmada">Confirmada</span>',
+                'pendiente': '<span class="badge pendiente">Pendiente</span>',
+                'duplicada': '<span class="badge duplicada">Duplicada</span>',
+                'ignorada': '<span class="badge ignorada">Ignorada</span>',
+            };
+            return statusMap[status] || `<span class="badge">${status}</span>`;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('es-AR', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                });
+            } catch {
+                return dateString;
+            }
+        }
+
+        function showImportMessage(message, type = 'success') {
+            const messageDiv = document.getElementById('importMessage');
+            messageDiv.className = type === 'success' ? 'success-message' : 'error-message';
+            messageDiv.textContent = message;
+
+            setTimeout(() => {
+                messageDiv.textContent = '';
+                messageDiv.className = '';
+            }, 5000);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ========================================
+        // DASHBOARD FUNCTIONS (EXISTING)
+        // ========================================
 
         // Formatear moneda
         function formatCurrency(amount) {

@@ -8,6 +8,25 @@ y este proyecto adhiere a [Versionado Semántico](https://semver.org/lang/es/).
 ## [No Publicado]
 
 ### Agregado
+- **Integración completa con backend de importación de Mercado Pago**
+  - Nueva pestaña "Importar Mercado Pago" con navegación por tabs
+  - Área de carga de archivos con drag & drop funcional
+  - Soporte para archivos CSV y Excel de Mercado Pago
+  - Validación de tipo y tamaño de archivo (máx 50MB)
+  - Integración con endpoint `/api/v1/imports/upload` del backend
+  - Visualización de resultados con KPIs (total, procesadas, duplicadas, fallidas, revisar)
+  - Tabla completa de transacciones importadas con:
+    - Fecha de operación
+    - Descripción y comercio normalizado
+    - Monto, moneda y tipo de transacción
+    - Categoría sugerida automáticamente
+    - Estado (confirmada, pendiente, duplicada, ignorada)
+    - Método de pago
+  - Badges de colores para tipos y estados de transacciones
+  - Manejo robusto de errores con mensajes claros
+  - Estados de carga visual (spinner)
+  - Scroll automático a resultados después de importación
+  - Diseño responsive y consistente con el tema oscuro
 - Frontend completo en HTML, CSS y JavaScript puro para la aplicación de finanzas personales
 - Diseño moderno con tema oscuro y efectos visuales profesionales
 - Balance total destacado con indicador visual de estado (positivo/negativo)
@@ -40,17 +59,17 @@ y este proyecto adhiere a [Versionado Semántico](https://semver.org/lang/es/).
   - `GET /transactions/{id}` - Obtener transacción específica
   - `PUT /transactions/{id}` - Actualizar transacción existente
   - `DELETE /transactions/{id}` - Eliminar transacción
-- Modelos de datos con SQLAlchemy para transacciones
-- Esquemas de validación con Pydantic
-- Base de datos SQLite para persistencia
+- Modelos de datos con Pydantic para validación de transacciones
+- Almacenamiento en archivo JSON local (`transacciones.json`)
+- Gestión de IDs autoincrementales para transacciones
 - Configuración de CORS para permitir peticiones desde el frontend
 - Documentación automática con Swagger UI en `/docs`
 - Soporte para tipos de transacción: ingresos y gastos
-- Campos: monto, tipo, descripción y timestamp automático
+- Campos: id, monto, tipo, descripción y fecha con timestamp automático
 
 ### Técnico
 - Framework: FastAPI
-- ORM: SQLAlchemy
 - Validación: Pydantic
-- Base de datos: SQLite
+- Persistencia: Archivo JSON local
 - Servidor de desarrollo: Uvicorn
+- Sin base de datos SQL ni ORM
