@@ -405,10 +405,10 @@
         // Calcular balance y totales
         function calculateTotals() {
             const totals = transactions.reduce((acc, transaction) => {
-                if (transaction.type === 'ingreso') {
-                    acc.income += parseFloat(transaction.amount);
+                if (transaction.tipo === 'ingreso') {
+                    acc.income += parseFloat(transaction.monto);
                 } else {
-                    acc.expense += parseFloat(transaction.amount);
+                    acc.expense += parseFloat(transaction.monto);
                 }
                 return acc;
             }, { income: 0, expense: 0 });
@@ -449,16 +449,16 @@
             const html = transactions
                 .sort((a, b) => b.id - a.id)
                 .map(transaction => `
-                    <div class="transaction-item ${transaction.type}">
+                    <div class="transaction-item ${transaction.tipo}">
                         <div class="transaction-header">
-                            <span class="transaction-type ${transaction.type}">
-                                ${transaction.type === 'ingreso' ? 'Ingreso' : 'Gasto'}
+                            <span class="transaction-type ${transaction.tipo}">
+                                ${transaction.tipo === 'ingreso' ? 'Ingreso' : 'Gasto'}
                             </span>
-                            <span class="transaction-amount ${transaction.type}">
-                                ${transaction.type === 'ingreso' ? '+' : '-'}${formatCurrency(Math.abs(transaction.amount))}
+                            <span class="transaction-amount ${transaction.tipo}">
+                                ${transaction.tipo === 'ingreso' ? '+' : '-'}${formatCurrency(Math.abs(transaction.monto))}
                             </span>
                         </div>
-                        <div class="transaction-description">${transaction.description}</div>
+                        <div class="transaction-description">${transaction.descripcion}</div>
                     </div>
                 `).join('');
 
@@ -634,9 +634,9 @@
             e.preventDefault();
 
             const formData = {
-                amount: parseFloat(document.getElementById('amount').value),
-                type: document.getElementById('type').value,
-                description: document.getElementById('description').value
+                monto: parseFloat(document.getElementById('amount').value),
+                tipo: document.getElementById('type').value,
+                descripcion: document.getElementById('description').value
             };
 
             const success = await submitTransaction(formData);
