@@ -185,11 +185,11 @@
             transform: translateX(5px);
         }
 
-        .transaction-item.expense {
+        .transaction-item.gasto {
             border-left-color: #ff4757;
         }
 
-        .transaction-item.income {
+        .transaction-item.ingreso {
             border-left-color: #2ed573;
         }
 
@@ -209,12 +209,12 @@
             letter-spacing: 1px;
         }
 
-        .transaction-type.income {
+        .transaction-type.ingreso {
             background: rgba(46, 213, 115, 0.2);
             color: #2ed573;
         }
 
-        .transaction-type.expense {
+        .transaction-type.gasto {
             background: rgba(255, 71, 87, 0.2);
             color: #ff4757;
         }
@@ -224,11 +224,11 @@
             font-weight: bold;
         }
 
-        .transaction-amount.income {
+        .transaction-amount.ingreso {
             color: #2ed573;
         }
 
-        .transaction-amount.expense {
+        .transaction-amount.gasto {
             color: #ff4757;
         }
 
@@ -345,8 +345,8 @@
                         <label for="type">Tipo</label>
                         <select id="type" name="type" required>
                             <option value="">Seleccionar...</option>
-                            <option value="income">Ingreso</option>
-                            <option value="expense">Gasto</option>
+                            <option value="ingreso">Ingreso</option>
+                            <option value="gasto">Gasto</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -405,7 +405,7 @@
         // Calcular balance y totales
         function calculateTotals() {
             const totals = transactions.reduce((acc, transaction) => {
-                if (transaction.type === 'income') {
+                if (transaction.type === 'ingreso') {
                     acc.income += parseFloat(transaction.amount);
                 } else {
                     acc.expense += parseFloat(transaction.amount);
@@ -452,10 +452,10 @@
                     <div class="transaction-item ${transaction.type}">
                         <div class="transaction-header">
                             <span class="transaction-type ${transaction.type}">
-                                ${transaction.type === 'income' ? 'Ingreso' : 'Gasto'}
+                                ${transaction.type === 'ingreso' ? 'Ingreso' : 'Gasto'}
                             </span>
                             <span class="transaction-amount ${transaction.type}">
-                                ${transaction.type === 'income' ? '+' : '-'}${formatCurrency(Math.abs(transaction.amount))}
+                                ${transaction.type === 'ingreso' ? '+' : '-'}${formatCurrency(Math.abs(transaction.amount))}
                             </span>
                         </div>
                         <div class="transaction-description">${transaction.description}</div>
@@ -572,6 +572,21 @@
             }, 3000);
         }
 
+        // Cargar balance desde la API
+        async function loadBalance() {
+            try {
+                const response = await fetch(`${API_URL}/balance`);
+                if (!response.ok) throw new Error('Error al cargar balance');
+
+                const data = await response.json();
+                const balanceElement = document.getElementById('balanceAmount');
+                balanceElement.textContent = formatCurrency(data.balance);
+                balanceElement.className = 'balance-amount' + (data.balance < 0 ? ' negative' : '');
+            } catch (error) {
+                console.error('Error al cargar balance:', error);
+            }
+        }
+
         // Cargar transacciones desde la API
         async function loadTransactions() {
             try {
@@ -603,6 +618,7 @@
                 const newTransaction = await response.json();
                 transactions.push(newTransaction);
                 updateUI();
+                await loadBalance(); // Actualizar balance desde la API
                 showMessage('Transacción agregada exitosamente', 'success');
 
                 return true;
@@ -636,7 +652,8 @@
             updateChart(totals);
         });
 
-        // Cargar transacciones al iniciar
+        // Cargar datos al iniciar
+        loadBalance();
         loadTransactions();
     </script>
 </body>
