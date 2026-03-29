@@ -575,7 +575,7 @@
         // Cargar transacciones desde la API
         async function loadTransactions() {
             try {
-                const response = await fetch(`${API_URL}/transactions`);
+                const response = await fetch(`${API_URL}/transacciones`);
                 if (!response.ok) throw new Error('Error al cargar transacciones');
 
                 transactions = await response.json();
@@ -590,7 +590,7 @@
         // Enviar nueva transacción
         async function submitTransaction(data) {
             try {
-                const response = await fetch(`${API_URL}/transactions`, {
+                const response = await fetch(`${API_URL}/transacciones`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
