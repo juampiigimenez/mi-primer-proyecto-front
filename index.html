@@ -1022,12 +1022,21 @@
                 const date = formatDate(tx.operation_date);
                 const description = tx.description || 'Sin descripción';
                 const merchant = tx.merchant || tx.merchant_normalized || '-';
-                const amount = formatCurrency(tx.amount || 0);
+
+                // Usar real_amount si está disponible, sino amount
+                const displayAmount = tx.real_amount !== undefined ? tx.real_amount : tx.amount;
+                const amount = formatCurrency(Math.abs(displayAmount || 0));
+
                 const currency = tx.currency || 'ARS';
                 const type = formatTransactionType(tx.transaction_type);
                 const category = tx.suggested_category_id || 'Sin categoría';
                 const status = formatStatus(tx.status);
-                const paymentMethod = tx.payment_method || '-';
+
+                // Combinar payment_method y payment_method_type si están disponibles
+                let paymentMethod = tx.payment_method || '-';
+                if (tx.payment_method_type && tx.payment_method_type !== tx.payment_method) {
+                    paymentMethod = `${tx.payment_method} (${tx.payment_method_type})`;
+                }
 
                 return `
                     <tr>
