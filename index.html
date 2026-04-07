@@ -917,6 +917,10 @@
         // ========================================
         // IMPORT FUNCTIONALITY
         // ========================================
+        // NOTA: El backend filtra automáticamente las transacciones de tarjeta de crédito
+        // con monto positivo (payment_method = 'credit_card' y real_amount > 0)
+        // para evitar que aparezcan como ingresos falsos.
+
         importButton.addEventListener('click', async () => {
             if (!selectedFile) {
                 showImportMessage('Por favor selecciona un archivo primero.', 'error');
