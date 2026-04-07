@@ -1063,15 +1063,8 @@
         function formatTransactionType(type) {
             const typeMap = {
                 'ingreso': '<span class="badge ingreso">Ingreso</span>',
-                'income': '<span class="badge ingreso">Ingreso</span>',
                 'gasto': '<span class="badge gasto">Gasto</span>',
-                'expense': '<span class="badge gasto">Gasto</span>',
                 'transferencia': '<span class="badge transferencia">Transferencia</span>',
-                'transfer': '<span class="badge transferencia">Transferencia</span>',
-                'devolucion': '<span class="badge devolucion">Devolución</span>',
-                'refund': '<span class="badge devolucion">Devolución</span>',
-                'ajuste': '<span class="badge ajuste">Ajuste</span>',
-                'adjustment': '<span class="badge ajuste">Ajuste</span>',
             };
             return typeMap[type?.toLowerCase()] || `<span class="badge">${type || '-'}</span>`;
         }
@@ -1079,13 +1072,9 @@
         function formatStatus(status) {
             const statusMap = {
                 'confirmada': '<span class="badge confirmada">Confirmada</span>',
-                'confirmed': '<span class="badge confirmada">Confirmada</span>',
                 'pendiente': '<span class="badge pendiente">Pendiente</span>',
-                'pending': '<span class="badge pendiente">Pendiente</span>',
                 'duplicada': '<span class="badge duplicada">Duplicada</span>',
-                'duplicate': '<span class="badge duplicada">Duplicada</span>',
                 'ignorada': '<span class="badge ignorada">Ignorada</span>',
-                'ignored': '<span class="badge ignorada">Ignorada</span>',
             };
             return statusMap[status?.toLowerCase()] || `<span class="badge">${status || '-'}</span>`;
         }
