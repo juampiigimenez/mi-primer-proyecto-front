@@ -1059,12 +1059,17 @@
         function formatTransactionType(type) {
             const typeMap = {
                 'ingreso': '<span class="badge ingreso">Ingreso</span>',
+                'income': '<span class="badge ingreso">Ingreso</span>',
                 'gasto': '<span class="badge gasto">Gasto</span>',
+                'expense': '<span class="badge gasto">Gasto</span>',
                 'transferencia': '<span class="badge transferencia">Transferencia</span>',
+                'transfer': '<span class="badge transferencia">Transferencia</span>',
                 'devolucion': '<span class="badge devolucion">Devolución</span>',
+                'refund': '<span class="badge devolucion">Devolución</span>',
                 'ajuste': '<span class="badge ajuste">Ajuste</span>',
+                'adjustment': '<span class="badge ajuste">Ajuste</span>',
             };
-            return typeMap[type] || `<span class="badge">${type}</span>`;
+            return typeMap[type?.toLowerCase()] || `<span class="badge">${type || '-'}</span>`;
         }
 
         function formatStatus(status) {
