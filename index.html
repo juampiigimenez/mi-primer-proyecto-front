@@ -1070,11 +1070,15 @@
         function formatStatus(status) {
             const statusMap = {
                 'confirmada': '<span class="badge confirmada">Confirmada</span>',
+                'confirmed': '<span class="badge confirmada">Confirmada</span>',
                 'pendiente': '<span class="badge pendiente">Pendiente</span>',
+                'pending': '<span class="badge pendiente">Pendiente</span>',
                 'duplicada': '<span class="badge duplicada">Duplicada</span>',
+                'duplicate': '<span class="badge duplicada">Duplicada</span>',
                 'ignorada': '<span class="badge ignorada">Ignorada</span>',
+                'ignored': '<span class="badge ignorada">Ignorada</span>',
             };
-            return statusMap[status] || `<span class="badge">${status}</span>`;
+            return statusMap[status?.toLowerCase()] || `<span class="badge">${status || '-'}</span>`;
         }
 
         function formatDate(dateString) {
