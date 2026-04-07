@@ -798,6 +798,11 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Confirm Button -->
+                    <button id="confirmButton" class="import-button" style="margin-top: 20px; display: none;">
+                        Confirmar y Registrar en Dashboard
+                    </button>
                 </div>
             </div>
         </div>
@@ -810,6 +815,7 @@
         let transactions = [];
         let pieChartInstance = null;
         let selectedFile = null;
+        let importedTransactions = []; // Almacenar transacciones importadas
 
         // ========================================
         // TAB NAVIGATION
@@ -1016,11 +1022,16 @@
 
         function renderImportedTransactions(transactions) {
             const tbody = document.getElementById('importedTransactionsBody');
+            const confirmButton = document.getElementById('confirmButton');
 
             if (transactions.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: #a0a0a0;">No hay transacciones para mostrar</td></tr>';
+                confirmButton.style.display = 'none';
                 return;
             }
+
+            // Guardar transacciones importadas para confirmarlas después
+            importedTransactions = transactions;
 
             const html = transactions.map(tx => {
                 const date = formatDate(tx.operation_date);
@@ -1058,6 +1069,17 @@
             }).join('');
 
             tbody.innerHTML = html;
+
+            // Mostrar botón de confirmar si hay transacciones confirmadas (no duplicadas)
+            const confirmedTransactions = transactions.filter(tx =>
+                tx.status && tx.status.toLowerCase() === 'confirmada'
+            );
+
+            if (confirmedTransactions.length > 0) {
+                confirmButton.style.display = 'block';
+            } else {
+                confirmButton.style.display = 'none';
+            }
         }
 
         function formatTransactionType(type) {
@@ -1109,6 +1131,89 @@
             div.textContent = text;
             return div.innerHTML;
         }
+
+        // ========================================
+        // CONFIRM BUTTON - Registrar transacciones en Dashboard
+        // ========================================
+        document.getElementById('confirmButton').addEventListener('click', async () => {
+            const confirmButton = document.getElementById('confirmButton');
+
+            // Filtrar solo transacciones confirmadas (no duplicadas, no ignoradas)
+            const confirmedTransactions = importedTransactions.filter(tx =>
+                tx.status && tx.status.toLowerCase() === 'confirmada'
+            );
+
+            if (confirmedTransactions.length === 0) {
+                showImportMessage('No hay transacciones confirmadas para registrar.', 'error');
+                return;
+            }
+
+            // Mostrar estado de carga
+            confirmButton.disabled = true;
+            confirmButton.innerHTML = '<div class="spinner" style="margin: 0 auto; width: 20px; height: 20px;"></div>';
+
+            let registeredCount = 0;
+            let errorCount = 0;
+
+            try {
+                // Enviar cada transacción al endpoint POST /transacciones
+                for (const tx of confirmedTransactions) {
+                    try {
+                        // Mapear transacción importada al formato esperado por el endpoint
+                        const transactionData = {
+                            monto: Math.abs(tx.amount || 0),
+                            tipo: tx.transaction_type.toLowerCase(), // "ingreso" o "gasto"
+                            descripcion: tx.description || tx.merchant || 'Importado desde Mercado Pago'
+                        };
+
+                        const response = await fetch(`${API_URL}/transacciones`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(transactionData)
+                        });
+
+                        if (response.ok) {
+                            registeredCount++;
+                        } else {
+                            errorCount++;
+                            console.error(`Error al registrar transacción: ${tx.description}`, await response.text());
+                        }
+
+                    } catch (error) {
+                        errorCount++;
+                        console.error(`Error al enviar transacción: ${tx.description}`, error);
+                    }
+                }
+
+                // Mostrar resultado
+                if (registeredCount > 0) {
+                    showImportMessage(
+                        `✓ ${registeredCount} transacción(es) registrada(s) exitosamente en el Dashboard.${errorCount > 0 ? ` ${errorCount} fallaron.` : ''}`,
+                        'success'
+                    );
+
+                    // Actualizar dashboard
+                    await loadBalance();
+                    await loadTransactions();
+
+                    // Redirigir al Dashboard después de 2 segundos
+                    setTimeout(() => {
+                        switchTab('dashboard');
+                    }, 2000);
+                } else {
+                    showImportMessage(`Error: No se pudieron registrar las transacciones.`, 'error');
+                }
+
+            } catch (error) {
+                console.error('Error general al confirmar transacciones:', error);
+                showImportMessage('Error al procesar las transacciones.', 'error');
+            } finally {
+                confirmButton.disabled = false;
+                confirmButton.textContent = 'Confirmar y Registrar en Dashboard';
+            }
+        });
 
         // ========================================
         // DASHBOARD FUNCTIONS (EXISTING)
