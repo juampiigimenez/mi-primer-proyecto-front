@@ -6,7 +6,9 @@ import { CONFIG } from './config.js';
 export function formatCurrency(amount) {
   return new Intl.NumberFormat(CONFIG.LOCALE, {
     style: 'currency',
-    currency: CONFIG.CURRENCY
+    currency: CONFIG.CURRENCY,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
   }).format(amount);
 }
 
@@ -21,6 +23,22 @@ export function formatDate(dateString) {
     });
   } catch {
     return dateString;
+  }
+}
+
+export function formatDateTime(isoString) {
+  if (!isoString) return '-';
+  try {
+    const date = new Date(isoString);
+    return date.toLocaleDateString(CONFIG.LOCALE, {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  } catch {
+    return isoString;
   }
 }
 
@@ -62,4 +80,24 @@ export function switchTab(tabName) {
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
   const activeContent = document.getElementById(tabName);
   if (activeContent) activeContent.classList.add('active');
+}
+
+export function showToast(message, duration = 5000) {
+  // Create toast element
+  const toast = document.createElement('div');
+  toast.className = 'toast-notification';
+  toast.innerHTML = `<span style="font-size: 1.5rem;">✓</span> ${message}`;
+
+  // Add to DOM
+  document.body.appendChild(toast);
+
+  // Remove after duration
+  setTimeout(() => {
+    toast.classList.add('fade-out');
+    setTimeout(() => {
+      if (toast.parentNode) {
+        document.body.removeChild(toast);
+      }
+    }, 300);
+  }, duration);
 }

@@ -6,6 +6,6 @@ export const CONFIG = {
   API_TIMEOUT: 30000,
   MAX_FILE_SIZE_MB: 50,
   SUPPORTED_FORMATS: ['.csv', '.xlsx', '.xls'],
-  CURRENCY: 'USD',
+  CURRENCY: 'ARS',
   LOCALE: 'es-AR'
 };

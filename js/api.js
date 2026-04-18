@@ -69,6 +69,10 @@ class APIClient {
   async getBatchTransactions(batchId) {
     return this.request(`/api/v1/imports/batches/${batchId}/transactions`);
   }
+
+  async getImportHistory() {
+    return this.request('/api/v1/imports/history');
+  }
 }
 
 export const api = new APIClient(CONFIG.API_URL);

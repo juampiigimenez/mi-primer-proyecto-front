@@ -3,7 +3,7 @@
  */
 import { api } from './api.js';
 import { CONFIG } from './config.js';
-import { formatCurrency, formatDate, showMessage, escapeHtml, switchTab } from './ui.js';
+import { formatCurrency, formatDate, showMessage, escapeHtml, switchTab, formatDateTime, showToast } from './ui.js';
 
 let selectedFile = null;
 let importedTransactions = [];
@@ -12,6 +12,7 @@ export function initImports() {
   setupFileUpload();
   setupImportButton();
   setupConfirmButton();
+  loadImportHistory();
 }
 
 function setupFileUpload() {
@@ -168,7 +169,7 @@ function renderImportedTransactions(transactions) {
   if (!tbody) return;
 
   if (transactions.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: #a0a0a0;">No hay transacciones para mostrar</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #a0a0a0;">No hay transacciones para mostrar</td></tr>';
     if (confirmButton) confirmButton.style.display = 'none';
     return;
   }
@@ -177,14 +178,9 @@ function renderImportedTransactions(transactions) {
 
   const html = transactions.map(tx => {
     const date = formatDate(tx.operation_date);
-    const description = tx.description || 'Sin descripción';
-    const merchant = tx.merchant || tx.merchant_normalized || '-';
     const displayAmount = tx.real_amount !== undefined ? tx.real_amount : tx.amount;
     const amount = formatCurrency(Math.abs(displayAmount || 0));
-    const currency = tx.currency || 'ARS';
     const type = formatTransactionType(tx.transaction_type);
-    const category = tx.suggested_category_id || 'Sin categoría';
-    const status = formatStatus(tx.status);
 
     let paymentMethod = tx.payment_method || '-';
     if (tx.payment_method_type && tx.payment_method_type !== tx.payment_method) {
@@ -194,13 +190,8 @@ function renderImportedTransactions(transactions) {
     return `
       <tr>
         <td>${date}</td>
-        <td>${escapeHtml(description)}</td>
-        <td>${escapeHtml(merchant)}</td>
         <td style="font-weight: bold;">${amount}</td>
-        <td>${currency}</td>
         <td>${type}</td>
-        <td>${escapeHtml(category)}</td>
-        <td>${status}</td>
         <td>${escapeHtml(paymentMethod)}</td>
       </tr>
     `;
@@ -274,6 +265,9 @@ function setupConfirmButton() {
       }
 
       if (registeredCount > 0) {
+        // Show toast notification
+        showToast(`Importación completada - ${registeredCount} transacción(es) registradas`);
+
         showMessage(
           'importMessage',
           `✓ ${registeredCount} transacción(es) registrada(s) exitosamente.${errorCount > 0 ? ` ${errorCount} fallaron.` : ''}`,
@@ -285,6 +279,10 @@ function setupConfirmButton() {
           // Import dashboard module to refresh data
           const { loadDashboardData } = await import('./dashboard.js');
           await loadDashboardData();
+
+          // Reload import history
+          await loadImportHistory();
+
           switchTab('dashboard');
         }, 2000);
       } else {
@@ -298,4 +296,54 @@ function setupConfirmButton() {
       confirmButton.textContent = 'Confirmar y Registrar en Dashboard';
     }
   });
+}
+
+async function loadImportHistory() {
+  try {
+    const response = await api.getImportHistory();
+
+    if (response.success && response.history.length > 0) {
+      renderImportHistory(response.history);
+      document.getElementById('importHistorySection').style.display = 'block';
+    }
+  } catch (error) {
+    console.error('Error loading import history:', error);
+    // Don't show error to user, just keep section hidden
+  }
+}
+
+function renderImportHistory(historyItems) {
+  const listElement = document.getElementById('importHistoryList');
+
+  if (!listElement) return;
+
+  if (historyItems.length === 0) {
+    listElement.innerHTML = '<div class="history-empty">No hay importaciones registradas aún</div>';
+    return;
+  }
+
+  const html = historyItems.map(item => `
+    <div class="history-item">
+      <div class="history-header">
+        <span class="history-icon">✓</span>
+        <span class="history-title">${escapeHtml(item.display_name)}</span>
+      </div>
+      <div class="history-stats">
+        <span class="history-stat">
+          ${item.total_transactions} transacciones
+        </span>
+        <span class="history-stat">
+          Ingresos: ${formatCurrency(item.total_ingresos)}
+        </span>
+        <span class="history-stat">
+          Gastos: ${formatCurrency(item.total_gastos)}
+        </span>
+      </div>
+      <div class="history-timestamp">
+        Confirmado el ${formatDateTime(item.confirmed_at)}
+      </div>
+    </div>
+  `).join('');
+
+  listElement.innerHTML = html;
 }
