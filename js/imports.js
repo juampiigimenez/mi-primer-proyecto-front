@@ -280,7 +280,13 @@ function setupConfirmButton() {
           'success'
         );
 
-        setTimeout(() => switchTab('dashboard'), 2000);
+        // Reload dashboard data and switch tabs
+        setTimeout(async () => {
+          // Import dashboard module to refresh data
+          const { loadDashboardData } = await import('./dashboard.js');
+          await loadDashboardData();
+          switchTab('dashboard');
+        }, 2000);
       } else {
         showMessage('importMessage', 'Error: No se pudieron registrar las transacciones.', 'error');
       }

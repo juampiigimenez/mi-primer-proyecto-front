@@ -8,8 +8,7 @@ let transactions = [];
 
 export async function initDashboard() {
   // Load initial data
-  await loadBalance();
-  await loadTransactions();
+  await loadDashboardData();
 
   // Setup form handler
   const form = document.getElementById('transactionForm');
@@ -22,6 +21,12 @@ export async function initDashboard() {
     const totals = calculateTotals();
     updateChart(totals);
   });
+}
+
+export async function loadDashboardData() {
+  // Load balance and transactions data
+  await loadBalance();
+  await loadTransactions();
 }
 
 async function loadBalance() {
