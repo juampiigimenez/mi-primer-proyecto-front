@@ -7,6 +7,7 @@ import { formatCurrency, formatDate, showMessage, escapeHtml, switchTab, formatD
 
 let selectedFile = null;
 let importedTransactions = [];
+let currentBatchId = null;
 
 export function initImports() {
   setupFileUpload();
@@ -116,6 +117,7 @@ function setupImportButton() {
       if (result && result.batch) {
         showMessage('importMessage', '¡Importación completada exitosamente!', 'success');
         displayImportResults(result.batch);
+        currentBatchId = result.batch.id; // Save batch ID for confirmation
         await loadImportedTransactions(result.batch.id);
       } else {
         throw new Error('Respuesta inesperada del servidor');
@@ -232,6 +234,11 @@ function setupConfirmButton() {
   if (!confirmButton) return;
 
   confirmButton.addEventListener('click', async () => {
+    if (!currentBatchId) {
+      showMessage('importMessage', 'No hay un batch para confirmar.', 'error');
+      return;
+    }
+
     const confirmedTransactions = importedTransactions.filter(tx =>
       tx.status && tx.status.toLowerCase() === 'confirmada'
     );
@@ -244,58 +251,65 @@ function setupConfirmButton() {
     confirmButton.disabled = true;
     confirmButton.innerHTML = '<div class="spinner" style="margin: 0 auto; width: 20px; height: 20px;"></div>';
 
-    let registeredCount = 0;
-    let errorCount = 0;
-
     try {
-      for (const tx of confirmedTransactions) {
-        try {
-          const transactionData = {
-            monto: Math.abs(tx.amount || 0),
-            tipo: tx.transaction_type.toLowerCase(),
-            descripcion: tx.description || tx.merchant || 'Importado desde Mercado Pago'
-          };
+      // Call backend confirm endpoint - this creates history AND registers transactions
+      const confirmResult = await api.confirmBatch(currentBatchId);
 
-          await api.createTransaction(transactionData);
-          registeredCount++;
-        } catch (error) {
-          errorCount++;
-          console.error(`Error registering transaction: ${tx.description}`, error);
-        }
-      }
+      if (confirmResult.success) {
+        const totalTransactions = confirmResult.summary.total_transacciones;
 
-      if (registeredCount > 0) {
         // Show toast notification
-        showToast(`Importación completada - ${registeredCount} transacción(es) registradas`);
+        showToast(`Importación completada - ${totalTransactions} transacción(es) registradas`);
 
         showMessage(
           'importMessage',
-          `✓ ${registeredCount} transacción(es) registrada(s) exitosamente.${errorCount > 0 ? ` ${errorCount} fallaron.` : ''}`,
+          `✓ ${totalTransactions} transacción(es) registrada(s) exitosamente.`,
           'success'
         );
 
+        // Clear the import UI
+        clearImportState();
+
+        // Reload import history
+        await loadImportHistory();
+
         // Reload dashboard data and switch tabs
         setTimeout(async () => {
-          // Import dashboard module to refresh data
           const { loadDashboardData } = await import('./dashboard.js');
           await loadDashboardData();
-
-          // Reload import history
-          await loadImportHistory();
-
           switchTab('dashboard');
         }, 2000);
       } else {
-        showMessage('importMessage', 'Error: No se pudieron registrar las transacciones.', 'error');
+        throw new Error('Error al confirmar el batch');
       }
     } catch (error) {
-      console.error('Error confirming transactions:', error);
-      showMessage('importMessage', 'Error al procesar las transacciones.', 'error');
+      console.error('Error confirming batch:', error);
+      showMessage('importMessage', error.message || 'Error al procesar las transacciones.', 'error');
     } finally {
       confirmButton.disabled = false;
       confirmButton.textContent = 'Confirmar y Registrar en Dashboard';
     }
   });
+}
+
+function clearImportState() {
+  // Clear selected file
+  selectedFile = null;
+  currentBatchId = null;
+  importedTransactions = [];
+
+  // Reset file input
+  const fileInput = document.getElementById('fileInput');
+  const fileInfo = document.getElementById('fileInfo');
+  const uploadArea = document.getElementById('uploadArea');
+  const importButton = document.getElementById('importButton');
+  const importResults = document.getElementById('importResults');
+
+  if (fileInput) fileInput.value = '';
+  if (fileInfo) fileInfo.style.display = 'none';
+  if (uploadArea) uploadArea.classList.remove('has-file');
+  if (importButton) importButton.disabled = true;
+  if (importResults) importResults.style.display = 'none';
 }
 
 async function loadImportHistory() {

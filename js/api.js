@@ -73,6 +73,12 @@ class APIClient {
   async getImportHistory() {
     return this.request('/api/v1/imports/history');
   }
+
+  async confirmBatch(batchId) {
+    return this.request(`/api/v1/imports/batches/${batchId}/confirm`, {
+      method: 'POST'
+    });
+  }
 }
 
 export const api = new APIClient(CONFIG.API_URL);
