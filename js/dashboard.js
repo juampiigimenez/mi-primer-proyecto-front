@@ -164,7 +164,7 @@ function updateChart(totals) {
 
   const centerX = canvas.width / 2;
   const centerY = canvas.height / 2;
-  const radius = Math.min(centerX, centerY) - 20;
+  const radius = Math.max(Math.min(centerX, centerY) - 20, 10); // Ensure minimum radius of 10px
 
   const total = totals.income + totals.expense;
   const incomeAngle = (totals.income / total) * 2 * Math.PI;
