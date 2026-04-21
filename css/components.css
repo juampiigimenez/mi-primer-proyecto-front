@@ -8,6 +8,37 @@ header {
   margin-bottom: var(--spacing-lg);
 }
 
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.reset-btn {
+  padding: 8px 16px;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  width: auto;
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: normal;
+}
+
+.reset-btn:hover {
+  background: #ffebee;
+  border-color: #ff4757;
+  color: #ff4757;
+  transform: translateY(0);
+  box-shadow: none;
+}
+
 /* Cards */
 .card {
   background: var(--bg-card);
@@ -316,6 +347,49 @@ canvas {
   justify-content: center;
   gap: var(--spacing-lg);
   margin-top: var(--spacing-md);
+}
+
+.chart-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: var(--spacing-md);
+}
+
+.chart-nav-btn {
+  padding: 8px 16px;
+  background: rgba(15, 52, 96, 0.6);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: var(--font-size-md);
+  font-weight: 500;
+  transition: all var(--transition-base);
+  width: auto;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.chart-nav-btn:hover:not(:disabled) {
+  background: rgba(15, 52, 96, 0.8);
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 212, 255, 0.2);
+}
+
+.chart-nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#monthRange {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+  flex: 1;
 }
 
 .legend-item {
@@ -715,4 +789,316 @@ canvas {
   color: var(--text-secondary);
   padding: var(--spacing-xl);
   font-style: italic;
+}
+
+/* Weekly Grouping Styles */
+.week-group {
+  background: rgba(15, 52, 96, 0.4);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-md);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+  transition: all var(--transition-base);
+}
+
+.week-group:hover {
+  background: rgba(15, 52, 96, 0.5);
+}
+
+.week-group.validated {
+  border-color: var(--color-success);
+  background: rgba(46, 213, 115, 0.05);
+}
+
+.week-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+  background: rgba(15, 52, 96, 0.6);
+  border-bottom: 1px solid var(--border-light);
+  gap: var(--spacing-md);
+}
+
+.week-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+  min-width: 0;
+}
+
+.week-header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex-shrink: 0;
+}
+
+.week-collapse-btn {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: var(--font-size-lg);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  width: auto;
+  min-width: 30px;
+  transition: transform var(--transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.week-collapse-btn:hover {
+  transform: scale(1.2);
+}
+
+.week-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.week-label {
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.week-validated-badge {
+  background: var(--color-success-light);
+  color: var(--color-success);
+  padding: 4px var(--spacing-sm);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-xs);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.week-summary {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.week-summary-item {
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  padding: 4px var(--spacing-sm);
+  border-radius: var(--radius-sm);
+}
+
+.week-summary-item.income {
+  color: var(--color-success);
+  background: var(--color-success-light);
+}
+
+.week-summary-item.expense {
+  color: var(--color-error);
+  background: var(--color-error-light);
+}
+
+.week-summary-item.total {
+  font-weight: bold;
+  font-size: var(--font-size-lg);
+}
+
+.week-summary-item.total.positive {
+  color: var(--color-success);
+}
+
+.week-summary-item.total.negative {
+  color: var(--color-error);
+}
+
+.week-confirm-btn {
+  background: linear-gradient(135deg, var(--color-success) 0%, var(--color-success-dark) 100%);
+  color: var(--text-white);
+  border: none;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: auto;
+  white-space: nowrap;
+}
+
+.week-confirm-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(46, 213, 115, 0.4);
+}
+
+.week-transactions {
+  display: flex;
+  flex-direction: column;
+}
+
+.week-transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid var(--border-light);
+  transition: background var(--transition-base);
+  gap: var(--spacing-md);
+}
+
+.week-transaction-item:last-child {
+  border-bottom: none;
+}
+
+.week-transaction-item:hover {
+  background: rgba(15, 52, 96, 0.6);
+}
+
+.week-transaction-item.ingreso {
+  border-left: 3px solid var(--color-success);
+}
+
+.week-transaction-item.gasto {
+  border-left: 3px solid var(--color-error);
+}
+
+.week-transaction-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex: 1;
+  min-width: 0;
+}
+
+.week-transaction-date {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.week-transaction-desc {
+  color: var(--text-primary);
+  font-size: var(--font-size-md);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.week-transaction-badge {
+  font-size: var(--font-size-xs);
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.week-transaction-badge.mp-badge {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.week-transaction-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex-shrink: 0;
+}
+
+.week-transaction-amount {
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  min-width: 100px;
+  text-align: right;
+}
+
+.week-transaction-amount.ingreso {
+  color: var(--color-success);
+}
+
+.week-transaction-amount.gasto {
+  color: var(--color-error);
+}
+
+.week-transaction-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.week-action-btn {
+  background: rgba(15, 52, 96, 0.8);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  width: auto;
+  min-width: auto;
+}
+
+.week-action-btn:hover {
+  transform: translateY(-2px) scale(1.1);
+  background: rgba(15, 52, 96, 1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.week-action-btn.edit-btn:hover {
+  border-color: var(--color-primary);
+}
+
+.week-action-btn.delete-btn:hover {
+  border-color: var(--color-error);
+}
+
+/* Responsive Weekly Styles */
+@media (max-width: 968px) {
+  .week-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+
+  .week-header-right {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+
+  .week-summary {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .week-confirm-btn {
+    width: 100%;
+  }
+
+  .week-transaction-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+
+  .week-transaction-left {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .week-transaction-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .week-transaction-amount {
+    min-width: auto;
+    text-align: left;
+  }
 }

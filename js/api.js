@@ -79,6 +79,37 @@ class APIClient {
       method: 'POST'
     });
   }
+
+  // Transaction update/delete endpoints
+  async updateTransaction(id, data) {
+    return this.request(`/transacciones/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async deleteTransaction(id) {
+    return this.request(`/transacciones/${id}`, {
+      method: 'DELETE'
+    });
+  }
+
+  // Week validation endpoints
+  async validateWeek(year, week) {
+    return this.request(`/api/v1/weeks/${year}/${week}/validate`, {
+      method: 'POST'
+    });
+  }
+
+  async getValidatedWeeks() {
+    return this.request('/api/v1/weeks/validated');
+  }
+
+  async resetAllData() {
+    return this.request('/api/v1/reset-all', {
+      method: 'DELETE'
+    });
+  }
 }
 
 export const api = new APIClient(CONFIG.API_URL);
