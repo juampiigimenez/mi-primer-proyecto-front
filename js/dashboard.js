@@ -275,7 +275,10 @@ function renderTransactions() {
       <div class="week-transaction-item ${tx.tipo}">
         <div class="week-transaction-left">
           <span class="week-transaction-date">${new Date(tx.fecha).toLocaleDateString('es-AR')}</span>
-          <span class="week-transaction-desc">${tx.descripcion}</span>
+          <span class="week-transaction-desc">
+            ${tx.descripcion}
+            ${tx.categoria && tx.categoria !== 'Sin categoría' ? `<span class="week-transaction-category">${tx.categoria}</span>` : ''}
+          </span>
           ${tx.metodo_pago === 'mercadopago' ? '<span class="week-transaction-badge mp-badge">MP</span>' : ''}
         </div>
         <div class="week-transaction-right">
