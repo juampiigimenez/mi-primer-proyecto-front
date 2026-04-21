@@ -245,6 +245,14 @@ function renderTransactions() {
     return;
   }
 
+  // Save current accordion states before re-rendering
+  const collapsedWeeks = new Set();
+  document.querySelectorAll('.week-transactions').forEach(weekDiv => {
+    if (weekDiv.style.display === 'none') {
+      collapsedWeeks.add(weekDiv.dataset.week);
+    }
+  });
+
   // Group transactions by week
   const grouped = groupTransactionsByWeek(transactions);
   const weekKeys = sortWeekKeysDesc(Object.keys(grouped));
@@ -319,6 +327,16 @@ function renderTransactions() {
   }).join('');
 
   listElement.innerHTML = html;
+
+  // Restore collapsed state for previously collapsed weeks
+  collapsedWeeks.forEach(weekKey => {
+    const transactionsDiv = document.querySelector(`.week-transactions[data-week="${weekKey}"]`);
+    const collapseBtn = document.querySelector(`.week-collapse-btn[data-week="${weekKey}"]`);
+    if (transactionsDiv && collapseBtn) {
+      transactionsDiv.style.display = 'none';
+      collapseBtn.textContent = '▶';
+    }
+  });
 
   // Attach event listeners
   attachWeekEventListeners();

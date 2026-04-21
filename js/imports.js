@@ -13,7 +13,6 @@ export function initImports() {
   setupFileUpload();
   setupImportButton();
   setupConfirmButton();
-  loadImportHistory();
 }
 
 function setupFileUpload() {
@@ -270,9 +269,6 @@ function setupConfirmButton() {
         // Clear the import UI
         clearImportState();
 
-        // Reload import history
-        await loadImportHistory();
-
         // Reload dashboard data and switch tabs
         setTimeout(async () => {
           const { loadDashboardData } = await import('./dashboard.js');
@@ -312,52 +308,3 @@ function clearImportState() {
   if (importResults) importResults.style.display = 'none';
 }
 
-async function loadImportHistory() {
-  try {
-    const response = await api.getImportHistory();
-
-    if (response.success && response.history.length > 0) {
-      renderImportHistory(response.history);
-      document.getElementById('importHistorySection').style.display = 'block';
-    }
-  } catch (error) {
-    console.error('Error loading import history:', error);
-    // Don't show error to user, just keep section hidden
-  }
-}
-
-function renderImportHistory(historyItems) {
-  const listElement = document.getElementById('importHistoryList');
-
-  if (!listElement) return;
-
-  if (historyItems.length === 0) {
-    listElement.innerHTML = '<div class="history-empty">No hay importaciones registradas aún</div>';
-    return;
-  }
-
-  const html = historyItems.map(item => `
-    <div class="history-item">
-      <div class="history-header">
-        <span class="history-icon">✓</span>
-        <span class="history-title">${escapeHtml(item.display_name)}</span>
-      </div>
-      <div class="history-stats">
-        <span class="history-stat">
-          ${item.total_transactions} transacciones
-        </span>
-        <span class="history-stat">
-          Ingresos: ${formatCurrency(item.total_ingresos)}
-        </span>
-        <span class="history-stat">
-          Gastos: ${formatCurrency(item.total_gastos)}
-        </span>
-      </div>
-      <div class="history-timestamp">
-        Confirmado el ${formatDateTime(item.confirmed_at)}
-      </div>
-    </div>
-  `).join('');
-
-  listElement.innerHTML = html;
-}
