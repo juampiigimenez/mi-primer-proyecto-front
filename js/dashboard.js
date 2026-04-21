@@ -65,7 +65,9 @@ export async function initDashboard() {
 async function loadValidatedWeeks() {
   try {
     const data = await api.getValidatedWeeks();
-    validatedWeeks = new Set(data.validated_weeks || []);
+    validatedWeeks = new Set(
+      data.validated_weeks.map(w => `${w.year}-${w.week_number}`)
+    );
   } catch (error) {
     console.error('Error loading validated weeks:', error);
     validatedWeeks = new Set();

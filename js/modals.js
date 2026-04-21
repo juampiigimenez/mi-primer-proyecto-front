@@ -1,6 +1,7 @@
 /**
  * Modal system for confirmations and editing
  */
+import { getCategoryOptionsHTML } from './categories.js';
 
 /**
  * Show confirmation modal
@@ -166,6 +167,13 @@ export function showEditModal(transaction) {
     const modal = document.createElement('div');
     modal.className = 'modal modal-large';
 
+    // Helper function to escape HTML
+    const escapeHtml = (text) => {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    };
+
     // Modal content
     modal.innerHTML = `
       <div class="modal-header">
@@ -176,8 +184,28 @@ export function showEditModal(transaction) {
           ${isMercadoPago ? `
             <div class="form-group">
               <label for="editDescripcion">Descripción</label>
-              <input type="text" id="editDescripcion" class="modal-input" value="${transaction.descripcion}" disabled>
-              <small style="color: var(--text-secondary);">Las transacciones de Mercado Pago no se pueden editar</small>
+              <input type="text" id="editDescripcion" class="modal-input" value="${escapeHtml(transaction.descripcion)}" required>
+            </div>
+            <div class="form-group">
+              <label for="editCategoria">Categoría</label>
+              <select id="editCategoria" class="modal-input" required>
+                ${getCategoryOptionsHTML(transaction.categoria || 'Sin categoría')}
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="editMonto">Monto</label>
+              <input type="number" id="editMonto" class="modal-input" value="${transaction.monto}" disabled>
+              <small style="color: var(--text-secondary);">Campo bloqueado (Mercado Pago)</small>
+            </div>
+            <div class="form-group">
+              <label for="editTipo">Tipo</label>
+              <input type="text" id="editTipo" class="modal-input" value="${transaction.tipo}" disabled>
+              <small style="color: var(--text-secondary);">Campo bloqueado (Mercado Pago)</small>
+            </div>
+            <div class="form-group">
+              <label for="editFecha">Fecha</label>
+              <input type="date" id="editFecha" class="modal-input" value="${transaction.fecha}" disabled>
+              <small style="color: var(--text-secondary);">Campo bloqueado (Mercado Pago)</small>
             </div>
           ` : `
             <div class="form-group">
@@ -193,24 +221,20 @@ export function showEditModal(transaction) {
             </div>
             <div class="form-group">
               <label for="editDescripcion">Descripción</label>
-              <textarea id="editDescripcion" class="modal-input" required>${transaction.descripcion}</textarea>
+              <textarea id="editDescripcion" class="modal-input" required>${escapeHtml(transaction.descripcion)}</textarea>
             </div>
             <div class="form-group">
               <label for="editCategoria">Categoría</label>
-              <input type="text" id="editCategoria" class="modal-input" value="${transaction.categoria || ''}" placeholder="sin_categorizar">
+              <select id="editCategoria" class="modal-input" required>
+                ${getCategoryOptionsHTML(transaction.categoria || 'Sin categoría')}
+              </select>
             </div>
           `}
         </form>
-        ${isMercadoPago ? `
-          <div class="modal-notice">
-            <strong>Nota:</strong> Las transacciones importadas desde Mercado Pago no pueden ser editadas.
-            Si necesitas modificarla, elimínala y crea una nueva transacción manual.
-          </div>
-        ` : ''}
       </div>
       <div class="modal-footer">
         <button class="modal-button modal-button-cancel" id="cancelBtn">Cancelar</button>
-        ${!isMercadoPago ? '<button class="modal-button modal-button-confirm" id="saveBtn">Guardar</button>' : ''}
+        <button class="modal-button modal-button-confirm" id="saveBtn">Guardar</button>
       </div>
     `;
 
@@ -220,16 +244,31 @@ export function showEditModal(transaction) {
     const cancelBtn = modal.querySelector('#cancelBtn');
     const saveBtn = modal.querySelector('#saveBtn');
 
-    if (!isMercadoPago) {
-      // Focus first input
+    // Focus first editable input
+    if (isMercadoPago) {
+      setTimeout(() => modal.querySelector('#editDescripcion').focus(), 100);
+    } else {
       setTimeout(() => modal.querySelector('#editMonto').focus(), 100);
+    }
 
-      // Handle save
-      saveBtn.addEventListener('click', () => {
+    // Handle save
+    saveBtn.addEventListener('click', () => {
+      const descripcion = modal.querySelector('#editDescripcion').value.trim();
+      const categoria = modal.querySelector('#editCategoria').value;
+
+      if (isMercadoPago) {
+        // For MP transactions, only update descripcion and categoria
+        if (!descripcion) {
+          alert('Por favor completa todos los campos requeridos');
+          return;
+        }
+
+        closeModal();
+        resolve({ descripcion, categoria });
+      } else {
+        // For manual transactions, update all fields
         const monto = parseFloat(modal.querySelector('#editMonto').value);
         const tipo = modal.querySelector('#editTipo').value;
-        const descripcion = modal.querySelector('#editDescripcion').value.trim();
-        const categoria = modal.querySelector('#editCategoria').value.trim() || 'sin_categorizar';
 
         if (!monto || monto <= 0 || !descripcion) {
           alert('Por favor completa todos los campos requeridos');
@@ -238,14 +277,14 @@ export function showEditModal(transaction) {
 
         closeModal();
         resolve({ monto, tipo, descripcion, categoria });
-      });
+      }
+    });
 
-      // Handle form submit
-      modal.querySelector('#editForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        saveBtn.click();
-      });
-    }
+    // Handle form submit
+    modal.querySelector('#editForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      saveBtn.click();
+    });
 
     // Handle cancel
     cancelBtn.addEventListener('click', () => {

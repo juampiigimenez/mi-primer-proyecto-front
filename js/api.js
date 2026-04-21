@@ -82,22 +82,23 @@ class APIClient {
 
   // Transaction update/delete endpoints
   async updateTransaction(id, data) {
-    return this.request(`/transacciones/${id}`, {
+    return this.request(`/api/v1/transactions/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data)
     });
   }
 
   async deleteTransaction(id) {
-    return this.request(`/transacciones/${id}`, {
+    return this.request(`/api/v1/transactions/${id}`, {
       method: 'DELETE'
     });
   }
 
   // Week validation endpoints
   async validateWeek(year, week) {
-    return this.request(`/api/v1/weeks/${year}/${week}/validate`, {
-      method: 'POST'
+    return this.request('/api/v1/weeks/validate', {
+      method: 'POST',
+      body: JSON.stringify({ year, week_number: week })
     });
   }
 
